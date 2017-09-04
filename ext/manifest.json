@@ -1,0 +1,26 @@
+{
+	"manifest_version": 2,
+	"name": "treehouse grabber",
+	"short_name": "#",
+    "description": "##",
+	"version": "0.0.0.1",
+	"background": {
+		"scripts": [
+			"js/background.js"
+		]
+	},
+	"content_scripts": [{
+		"matches": [
+			"*://*.teamtreehouse.com/*"
+		],
+		"js": [
+            "js/jquery-3.2.1.min.js",
+			"js/content.js"
+		],
+		"run_at": "document_end"
+	}],
+	"permissions": [
+		"tabs", "webNavigation", "notifications", "cookies"
+	],
+	"web_accessible_resources": ["template/*", "js/*", "css/*", "fonts/*", "images/*", "manifest.json"]
+}

@@ -11,7 +11,8 @@
 	},
 	"content_scripts": [{
 		"matches": [
-			"*://*.teamtreehouse.com/*"
+			"*://*.teamtreehouse.com/*",
+			"*://*.lynda.com/*"
 		],
 		"js": [
             "js/jquery-3.2.1.min.js",
@@ -22,5 +23,8 @@
 	"permissions": [
 		"tabs", "webNavigation", "notifications", "cookies"
 	],
+	"browser_action": {
+
+	},
 	"web_accessible_resources": ["template/*", "js/*", "css/*", "fonts/*", "images/*", "manifest.json"]
 }

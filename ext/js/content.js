@@ -71,14 +71,32 @@ function lynda_dir_name_get(video_element) {
     console.log('>>', video_info);
     if (video_info && parseInt(video_info.VideoId) > 0) {
         var video_id = video_info.VideoId;
-        var course_title = video_info.CourseTitle;
+        var course_title = utl_string_replace_colon_by_dash(video_info.CourseTitle);
         var chapter_title = $('#sidebar .toc-video-item[data-video-id="' + video_id + '"]').parent().siblings('.chapter-row').find('[data-ga-label="toc-chapter"]').text();
         var video_title = ($('#sidebar .toc-video-item[data-video-id="' + video_id + '"]').prevAll().length + 1) + '. ' + video_info.VideoTitle;
         console.log('>>', video_id, course_title, chapter_title, video_title);
         var dir_name = course_title + '/' + chapter_title + '/' + video_title;
+        var lynda_learning_path = lynda_learning_path_get();
+        if (lynda_learning_path) {
+            dir_name = lynda_learning_path + '/' + dir_name;
+        }
         dir_name = utl_string_sanitize(dir_name);
     }
     return dir_name;
+}
+function lynda_learning_path_get() {
+    var lynda_learning_path = false;
+    var lynda_learning_path_link = $('[data-ga-label="breadcrumb-item"]').first().attr('href');
+    var lynda_learning_path_text = $('[data-ga-label="breadcrumb-item"] span').first().text();
+
+    if (typeof lynda_learning_path_link === 'string' && lynda_learning_path_link.indexOf('/learning-paths/') > -1 && typeof lynda_learning_path_text === 'string' && lynda_learning_path_text.indexOf('Learning Path: ') > -1) {
+        var lynda_learning_path_category = lynda_learning_path_link.split('/learning-paths/')[1];
+        var lynda_learning_path_subcategory = lynda_learning_path_text.split('Learning Path: ')[1];
+        if (lynda_learning_path_category && lynda_learning_path_subcategory) {
+            lynda_learning_path = 'Learning Path' + '/' + lynda_learning_path_category.split('/')[0] + '/' + lynda_learning_path_subcategory.split('/')[0];
+        }
+    }
+    return lynda_learning_path;
 }
 function lynda_open_links() {
     $('#toc-content .video-row a').each(function(a, b) {
@@ -92,6 +110,12 @@ function lynda_open_links() {
 function utl_string_sanitize(string) {
     if (string) {
         string = string.replace(/[^a-zA-Z0-9\-. \/]/gi, '');
+    };
+    return string;
+}
+function utl_string_replace_colon_by_dash(string) {
+    if (string) {
+        string = string.replace(/[\:]/gi, '-');
     };
     return string;
 }

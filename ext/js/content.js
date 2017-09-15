@@ -110,6 +110,7 @@ function lynda_open_links() {
 function utl_string_sanitize(string) {
     if (string) {
         string = string.replace(/[^a-zA-Z0-9\-. \/]/gi, '');
+        string = string.replace(/^[.\s]+|[.\s]+$/gm,'');
     };
     return string;
 }

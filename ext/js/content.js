@@ -45,7 +45,7 @@ if (location.href.indexOf('teamtreehouse.com') > -1) {
             if (mp4_source && mp4_source.indexOf('/secure/courses/') > -1) {
                 clearInterval(lynda_timer);
                 var dir_name = lynda_dir_name_get(this);
-                console.log('>>', dir_name);
+                console.log('>>', dir_name, mp4_source);
                 grabber_save_video('lynda', dir_name, mp4_source);
             }
         });
@@ -79,6 +79,11 @@ function lynda_dir_name_get(video_element) {
         var lynda_learning_path = lynda_learning_path_get();
         if (lynda_learning_path) {
             dir_name = lynda_learning_path + '/' + dir_name;
+        } else {
+            var lynda_category_path = lynda_category_path_get();
+            if (lynda_category_path) {
+                dir_name = lynda_category_path + '/' + dir_name;
+            }
         }
     }
     return dir_name;
@@ -92,10 +97,24 @@ function lynda_learning_path_get() {
         var lynda_learning_path_category = lynda_learning_path_link.split('/learning-paths/')[1];
         var lynda_learning_path_subcategory = lynda_learning_path_text.split('Learning Path: ')[1];
         if (lynda_learning_path_category && lynda_learning_path_subcategory) {
-            lynda_learning_path = 'Learning Path' + '/' + utl_string_sanitize(lynda_learning_path_category.split('/')[0]) + '/' + utl_string_sanitize(lynda_learning_path_subcategory.split('/')[0]);
+            lynda_learning_path = 'Learning Path' +
+                '/' + utl_string_sanitize(lynda_learning_path_category.split('/')[0]) + '/' + utl_string_sanitize(lynda_learning_path_subcategory.split('/')[0]);
         }
     }
     return lynda_learning_path;
+}
+function lynda_category_path_get() {
+    var lynda_category_path = false;
+    var lynda_category = utl_string_sanitize($($('.breadcrumb li a')[0]).text());
+    var lynda_subcategory = utl_string_sanitize($($('.breadcrumb li a')[1]).text());
+    if (typeof lynda_category === 'string' && lynda_category.length > 1) {
+        if (typeof lynda_subcategory === 'string' && lynda_subcategory.length > 1) {
+            lynda_category_path = lynda_category + '/' + lynda_subcategory;
+        } else {
+            lynda_category_path = lynda_category;
+        }
+    }
+    return lynda_category_path;
 }
 function lynda_open_links() {
     $('#toc-content .video-row a').each(function(a, b) {
@@ -109,7 +128,7 @@ function lynda_open_links() {
 function utl_string_sanitize(string) {
     if (string) {
         string = string.replace(/[^a-zA-Z0-9\-. ]/gi, '');
-        string = string.replace(/^[.\s]+|[.\s]+$/gm,'');
+        string = string.replace(/^[.\s]+|[.\s]+$/gm, '');
     };
     return string;
 }

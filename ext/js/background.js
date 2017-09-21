@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                     chrome.tabs.create({
                         url: url
                     }, function() {});
-                }, Math.floor(Math.random() * 15) + 1);
+                }, Math.floor(Math.random() * 15 * 1000) + 1);
             }
         }
     }

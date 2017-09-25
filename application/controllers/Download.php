@@ -57,10 +57,10 @@ class Download extends CI_Controller {
 				if (!file_exists($dir_name)) {
 	                mkdir($dir_name, 0755, true);
 	            }
-                if (!file_exists($dir_name . DIRECTORY_SEPARATOR . $file_name)) {
+                //if (!file_exists($dir_name . DIRECTORY_SEPARATOR . $file_name)) {
                     $file_content = file_get_contents($mp4_source);
                     file_put_contents($dir_name . DIRECTORY_SEPARATOR . $file_name, $file_content);
-                }
+                //}
             }
         }
 	}
